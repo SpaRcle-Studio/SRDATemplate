@@ -1,0 +1,6 @@
+[submodule "libs/Graphics"]
+	path = libs/Graphics
+	url = https://github.com/SpaRcle-Studio/SRRender
+[submodule "libs/Utils"]
+	path = libs/Utils
+	url = https://github.com/SpaRcle-Studio/SRCommon
