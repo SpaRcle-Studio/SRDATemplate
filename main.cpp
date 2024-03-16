@@ -8,7 +8,7 @@
 #include <Utils/Locale/Encoding.h>
 
 #include <Graphics/Window/Window.h>
-#include <Utils/Types/SafePointer.h>
+#include <Utils/ResourceManager/ResourceManager.h>
 
 int main(int argc, char *argv[]) {
     auto&& applicationPath = SR_PLATFORM_NS::GetApplicationPath().GetFolder();
@@ -20,10 +20,11 @@ int main(int argc, char *argv[]) {
 
     SR_LOG("Starting application...");
 
-    auto&& pWindow = new SR_GRAPH_NS::Window();
-    pWindow->Initialize("Test", {1920, 1080});
+/*    auto&& pWindow = new SR_GRAPH_NS::Window();
+    pWindow->Initialize("Test", {1920, 1080});*/
 
     SR_LOG("Exiting application...");
+    SR_UTILS_NS::ResourceManager::DestroySingleton();
     SR_UTILS_NS::GetSingletonManager()->DestroyAll();
     return 0;
 }

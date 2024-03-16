@@ -30,43 +30,20 @@ endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DSR_DLL_EXPORTS -DSR_UTILS_ASSIMP")
 
-if (MINGW)
-else()
-    if (ANDROID_NDK)
-        #TODO: Закомментировано для простоты сборки, чтобы не разбираться с ошибками из-за неиспользованных переменных (НЕ ПИШИТЕ ПЕРЕМЕННЫЕ, НЕ ИСПОЛЬЗУЯ ИХ)
-        #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -Wc++17-extensions -Wimplicit-fallthrough -Wc++17-attribute-extensions -Wunused-variable -Wno-unused-variable -Wno-unused-parameter -Wno-unused-function -Wdeprecated-volatile -Wunused-function")
-        #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wc++17-extensions -Wimplicit-fallthrough -Wc++17-attribute-extensions -Wunused-variable -Wno-unused-variable -Wno-unused-parameter -Wno-unused-function -Wdeprecated-volatile -Wunused-function")
-
-        #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -Wreorder-ctor -Wno-reorder -Wmissing-field-initializers -Wunused-value")
-        #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wreorder-ctor -Wno-reorder -Wmissing-field-initializers -Wunused-value")
-
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wcomment -Wno-comment -Woverloaded-virtual -Wno-everything -Wmissing-braces -Wunused-private-field -Wno-unused-private-field")
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wcomment -Wno-comment -Woverloaded-virtual -Wno-everything -Wmissing-braces -Wunused-private-field -Wno-unused-private-field")
-    else()
-        if (MSVC)
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj /utf-8")
-        else ()
-            add_compile_options(-fexec-charset=UTF-8)
-        endif ()
-    endif()
-endif()
-
-set(SR_UTILS_CMAKE_ASSIMP ON)
-set(SR_UTILS_FMT_HEADER_ONLY ON)
-
-set(SR_UTILS_STATIC_LIBRARY ON)
-set(SR_GRAPHICS_STATIC_LIBRARY ON)
-set(CRYPTIA_STATIC_LIBRARY ON)
-
-set(SR_UTILS_ASSIMP ON)
-set(SR_ICU ON)
-set(EVO_VULKAN_STATIC_LIBRARY ON)
-
-add_subdirectory(libs/Utils)
-add_subdirectory(libs/Graphics)
+add_subdirectory(libs)
 
 add_executable(${CMAKE_PROJECT_NAME} cxx/SRDATemplate.cxx main.cpp)
 
 target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC inc)
+
+add_custom_command(TARGET ${CMAKE_PROJECT_NAME}
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND}
+    -DTARGET_NAME=${CMAKE_PROJECT_NAME}
+    -DTARGET_PATH=${CMAKE_BINARY_DIR}
+    -P ${CMAKE_SOURCE_DIR}/cmake/PostBuild.cmake
+    COMMENT "Running SpaRcle Template for Desktop Applications post-build script..."
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC Utils Graphics)
