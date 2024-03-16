@@ -11,6 +11,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DSR_DLL_EXPORTS")
 add_definitions(
         -DSR_ICU
         -DSR_USE_IMGUI
+        -DSR_UTILS_ASSIMP
         -DSR_USE_IMGUIZMO
         -DSR_USE_IMGUI_NODE_EDITOR
         -DSR_USE_VULKAN
@@ -26,6 +27,8 @@ endif()
 if (UNIX AND CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-pie -no-pie -g3")
 endif()
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DSR_DLL_EXPORTS -DSR_UTILS_ASSIMP")
 
 if (MINGW)
 else()
@@ -48,7 +51,7 @@ else()
     endif()
 endif()
 
-set(SR_UTILS_CMAKE_ASSIMP OFF CACHE INTERNAL "" FORCE)
+set(SR_UTILS_CMAKE_ASSIMP ON)
 set(SR_UTILS_FMT_HEADER_ONLY ON)
 
 set(SR_UTILS_STATIC_LIBRARY ON)
@@ -56,6 +59,7 @@ set(SR_GRAPHICS_STATIC_LIBRARY ON)
 set(CRYPTIA_STATIC_LIBRARY ON)
 
 set(SR_UTILS_ASSIMP ON)
+set(SR_ICU ON)
 set(EVO_VULKAN_STATIC_LIBRARY ON)
 
 add_subdirectory(libs/Utils)
